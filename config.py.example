@@ -3,3 +3,7 @@ USERNAME = ""
 PASSWORD = ""
 PREFERRED_BARBER = ""
 PREFERRED_SERVICE_ID = 0
+
+# Telegram notifications (optional)
+TELEGRAM_BOT_TOKEN = ""  # es. "123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
+TELEGRAM_CHAT_ID = ""    # es. "123456789" o "-100123456789" per gruppi
