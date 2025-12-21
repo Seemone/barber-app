@@ -11,16 +11,12 @@ import base64
 import json
 import requests
 
-from datetime import datetime, timedelta
-from typing import Optional
-
+from datetime import datetime
 from config import BARBER_ID, USERNAME, PASSWORD, PREFERRED_BARBER, PREFERRED_SERVICE_ID
 
 from rich.console import Console, Group
 from rich.table import Table
 from rich.panel import Panel
-from rich.columns import Columns
-from rich.layout import Layout
 from rich.text import Text
 from rich import box
 
@@ -176,21 +172,21 @@ class BarberAppClient:
             self._services = self._request_json("ServiziAppFlutter", "")
         return self._services
     
-    def get_pending_reservations(self) -> list[dict]:
+    def get_pending_reservations(self) -> dict | list:
         """Ottiene prenotazioni in coda (non confermate)"""
         return self._request_json(
             "PrenotazioniSospeseMobileGet",
             self.username, "", "", "", "", "", "", ""
         )
     
-    def get_confirmed_reservations(self) -> list[dict]:
+    def get_confirmed_reservations(self) -> dict | list:
         """Ottiene prenotazioni confermate"""
         return self._request_json(
             "PrenotazioniMobileGet",
             self.username, "", "", "", "", "", "", ""
         )
     
-    def get_schedule(self) -> list[dict]:
+    def get_schedule(self) -> dict | list:
         """Ottiene slot disponibili per tutti i barbieri"""
         if not hasattr(self, '_schedule') or self._schedule is None:
             self._schedule = self._request_json("OrariGet", "")
@@ -656,7 +652,7 @@ def book_appointment(client: BarberAppClient, current_service_id: int) -> int:
     datetime_str = selected_day['date_str'] + time_hhmm
     
     # Step 4: Conferma
-    console.print(f"\n[bold]📋 RIEPILOGO PRENOTAZIONE[/bold]")
+    console.print("\n[bold]📋 RIEPILOGO PRENOTAZIONE[/bold]")
     console.print(f"  [cyan]Data:[/cyan] {selected_day['day_name']} {selected_day['date'].strftime('%d/%m/%Y')}")
     console.print(f"  [cyan]Ora:[/cyan] {selected_time}")
     console.print(f"  [cyan]Servizio:[/cyan] {service_name}")
@@ -723,7 +719,7 @@ def cancel_appointment(client: BarberAppClient):
     price = client.get_service_price(selected['Ti'])
     
     # Conferma
-    console.print(f"\n[bold]Stai per cancellare:[/bold]")
+    console.print("\n[bold]Stai per cancellare:[/bold]")
     console.print(f"  [cyan]Data:[/cyan] {dt.strftime('%d/%m/%Y %H:%M')}")
     console.print(f"  [cyan]Servizio:[/cyan] {service_name}")
     console.print(f"  [cyan]Barbiere:[/cyan] {selected['Pa']}")

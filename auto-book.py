@@ -51,8 +51,8 @@ def monitor_and_book(
     service_id: int,
     barber: str,
     interval: int = 300,
-    min_hour: int = None,
-    max_hour: int = None,
+    min_hour: int = 0,
+    max_hour: int = 24,
     dry_run: bool = False
 ):
     """
@@ -140,8 +140,8 @@ def monitor_and_book(
             
             if found_slot:
                 day_name = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'][found_slot['date'].weekday()]
-                console.print(f"[bold green]✅ TROVATO![/bold green]")
-                console.print(f"\n[bold]🎯 Slot disponibile:[/bold]")
+                console.print("[bold green]✅ TROVATO![/bold green]")
+                console.print("\n[bold]🎯 Slot disponibile:[/bold]")
                 console.print(f"   📅 {day_name} {found_slot['date'].strftime('%d/%m/%Y')}")
                 console.print(f"   🕐 {found_slot['time']}")
                 console.print(f"   ✂️  {service_name}")
