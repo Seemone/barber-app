@@ -47,6 +47,54 @@ PREFERRED_BARBER = PREFERRED_BARBER
 PREFERRED_SERVICE_ID = PREFERRED_SERVICE_ID
 
 # ============================================================
+# SEARCH FUNCTION (PUBLIC - NO AUTH)
+# ============================================================
+
+def search_nearby(lat: float, lon: float, radius: int = 10000, activity_type: int = 1) -> list[dict]:
+    """
+    Cerca attività nelle vicinanze (endpoint pubblico, non richiede autenticazione).
+    
+    Args:
+        lat: Latitudine GPS
+        lon: Longitudine GPS
+        radius: Raggio di ricerca in metri (default 10km)
+        activity_type: Tipo attività (1 = parrucchiere/barbiere)
+    
+    Returns:
+        Lista di attività trovate con:
+        - Key: ID da usare come user_id nelle richieste
+        - Nome: Nome attività
+        - Telefono: Numero telefono
+        - Indirizzo: Indirizzo
+        - Distanza: Distanza in metri
+        - Lat, Lon: Coordinate GPS
+    """
+    url = "https://aws.bookappbusiness.com:2807/$1/0"
+    
+    # Payload pubblico: ///CercaAttivitaVicinaGet/tipo/lat/lon/raggio//
+    payload = f"///CercaAttivitaVicinaGet/{activity_type}/{lat}/{lon}/{radius}//"
+    encoded = base64.b64encode(payload.encode()).decode()
+    
+    response = requests.post(url, data=encoded, headers={
+        "Content-Type": "text/plain; charset=utf-8",
+        "User-Agent": "Dart/3.8 (dart:io)"
+    })
+    response.raise_for_status()
+    
+    # Decode response
+    data = response.text
+    if not data:
+        return []
+    
+    padding = 4 - len(data) % 4
+    if padding != 4:
+        data += '=' * padding
+    decoded = base64.b64decode(data).decode()
+    
+    return json.loads(decoded) if decoded else []
+
+
+# ============================================================
 # API CLIENT
 # ============================================================
 
