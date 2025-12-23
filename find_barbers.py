@@ -39,10 +39,19 @@ def main():
     results = search_nearby(lat=lat, lon=lon, radius=args.radius)
 
     for shop in results:
-        print(f"{shop['Nome']} - ID: {shop['Key']}")
-        print(f"  Indirizzo: {shop['Indirizzo']}")
-        print(f"  Tel: {shop['Telefono']}")
-        print(f"  Distanza: {shop['Distanza']}m")
+        nome = shop.get("Nome", "N/A")
+        key = shop.get("Key", "N/A")
+        indirizzo = shop.get("Indirizzo", "N/A")
+        telefono = shop.get("Telefono", "N/A")
+        distanza = shop.get("Distanza")
+        if distanza is not None:
+            distanza_str = f"{distanza}m"
+        else:
+            distanza_str = "N/A"
+        print(f"{nome} - ID: {key}")
+        print(f"  Indirizzo: {indirizzo}")
+        print(f"  Tel: {telefono}")
+        print(f"  Distanza: {distanza_str}")
 
 
 if __name__ == "__main__":
