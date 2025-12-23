@@ -867,7 +867,7 @@ class TestInteractiveFlows:
         assert ui_client._schedule is None
 
 
-class TestInteractiveFlows:
+class TestMainEntry:
     def test_main_invokes_interactive_menu(self, monkeypatch):
         created_client = {}
         
