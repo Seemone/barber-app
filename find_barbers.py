@@ -32,7 +32,17 @@ def main():
         lat, lon = args.lat, args.lon
         print("📍 Posizione fornita tramite argomenti CLI.\n")
     else:
-        g = geocoder.ip("me")
+        try:
+            g = geocoder.ip("me")
+        except Exception as exc:
+            print(f"Errore durante il rilevamento automatico della posizione: {exc}")
+            print("Specificare manualmente la posizione usando --lat e --lon.")
+            return
+
+        if not g or not getattr(g, "latlng", None):
+            print("Impossibile determinare automaticamente la posizione corrente.")
+            print("Specificare manualmente la posizione usando --lat e --lon.")
+            return
         lat, lon = g.latlng
         print(f"📍 Posizione rilevata: {lat}, {lon}\n")
 
